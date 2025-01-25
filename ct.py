@@ -119,7 +119,7 @@ def process_image_endpoint(image_path: str = Body(...)):
     Expects a JSON body with { "image_path": "/path/to/your/image.png" }.
     Returns processed contour & boundary data.
     """
-    result = process_image(image_path)
+    #result = process_image(image_path)
     return json.dumps({"response":"helloo"})
 
 if __name__ == "__main__":
