@@ -109,7 +109,6 @@ def process_image(image_path, output_size=(200, 200), threshold=128, epsilon_rat
 
     # Serialize to JSON string and print
     json_str = json.dumps(data_for_json, indent=2)
-    print(json_str)
 
     # Return the Python dictionary (if you want to use it programmatically)
     return data_for_json
@@ -121,7 +120,7 @@ def process_image_endpoint(image_path: str = Body(...)):
     Returns processed contour & boundary data.
     """
     result = process_image(image_path)
-    return result
+    return json.dumps({"response":"helloo"})
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
