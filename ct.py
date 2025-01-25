@@ -1,8 +1,14 @@
+import uvicorn
+from fastapi import FastAPI, Body
+import os
+
 import json
 from PIL import Image
 import numpy as np
 from skimage.morphology import skeletonize
 import cv2
+
+app = FastAPI()
 
 def process_image(image_path, output_size=(200, 200), threshold=128, epsilon_ratio=0.001):
     """
@@ -107,3 +113,16 @@ def process_image(image_path, output_size=(200, 200), threshold=128, epsilon_rat
 
     # Return the Python dictionary (if you want to use it programmatically)
     return data_for_json
+
+@app.post("/process-image")
+def process_image_endpoint(image_path: str = Body(...)):
+    """
+    Expects a JSON body with { "image_path": "/path/to/your/image.png" }.
+    Returns processed contour & boundary data.
+    """
+    result = process_image(image_path)
+    return result
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
