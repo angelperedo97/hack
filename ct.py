@@ -125,7 +125,7 @@ async def process_image_endpoint(prompt: str = Form(...)):
         "dog": "https://github.com/angelperedo97/hack/blob/main/dog.jpg",
         "boat": "https://github.com/angelperedo97/hack/blob/main/boat.png",
         "bird": "https://github.com/angelperedo97/hack/blob/main/bird.jpg",
-        "flower":"https://github.com/angelperedo97/hack/blob/main/flower.png"
+        "flower":"https://github.com/angelperedo97/hack/blob/main/flower.png",
         "plant":"https://github.com/angelperedo97/hack/blob/main/plant.png"
     }
 
