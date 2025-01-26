@@ -94,7 +94,7 @@ def process_image(image_path, output_size=(200, 200), threshold=128, epsilon_rat
 
     # 5) Convert points to JSON-like structure
     contour_points_json = [
-        {"x": int(point[0][0]), "y": int(point[0][1])}
+        {"x": int(point[0][0]), "y": 200 - int(point[0][1])}
         for point in contour_points
     ]
 
