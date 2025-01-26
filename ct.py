@@ -1,8 +1,7 @@
 import uvicorn
-from fastapi import FastAPI, File, UploadFile, Form, HTTPException, status
+from fastapi import FastAPI, File, UploadFile
 import io
 import os
-import re
 
 import json
 from PIL import Image
@@ -116,26 +115,14 @@ def process_image(image_path, output_size=(200, 200), threshold=128, epsilon_rat
     return data_for_json
 
 @app.post("/process-image")
-async def process_image_endpoint(prompt: str = Form(...)):
+async def process_image_endpoint(file: UploadFile = File(...)):
     """
     Expects a JSON body with { "image_path": "/path/to/your/image.png" }.
     Returns processed contour & boundary data.
     """
-    options = {
-        "dog": "https://github.com/angelperedo97/hack/blob/main/dog.jpg",
-        "boat": "https://github.com/angelperedo97/hack/blob/main/boat.png",
-        "bird": "https://github.com/angelperedo97/hack/blob/main/bird.jpg",
-        "flower":"https://github.com/angelperedo97/hack/blob/main/flower.png",
-        "plant":"https://github.com/angelperedo97/hack/blob/main/plant.png"
-    }
+    img_bytes = await file.read()
 
-    option = re.sub(r'[^\w\s]', '', prompt)
-
-    file_url = options[option]
-    
-    #img_bytes = await file.read()
-
-    img = Image.open(file_url)
+    img = Image.open(io.BytesIO(img_bytes))
     result = process_image(img)
     return result
 
