@@ -1,5 +1,5 @@
 import uvicorn
-from fastapi import FastAPI, File, UploadFile, Form
+from fastapi import FastAPI, File, UploadFile, Form, HTTPException, status
 import io
 import os
 import re
@@ -135,7 +135,7 @@ async def process_image_endpoint(prompt: str = Form(...)):
     
     #img_bytes = await file.read()
 
-    img = Image.open(io.BytesIO(file_url))
+    img = Image.open(file_url)
     result = process_image(img)
     return result
 
