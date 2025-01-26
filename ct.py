@@ -1,5 +1,6 @@
 import uvicorn
-from fastapi import FastAPI, Body
+from fastapi import FastAPI, File, UploadFile
+import io
 import os
 
 import json
@@ -28,7 +29,7 @@ def process_image(image_path, output_size=(200, 200), threshold=128, epsilon_rat
         """
         Convert an image to a simplified 2D binary matrix.
         """
-        img = Image.open(image_path).convert("L")  # Convert to grayscale
+        img = image_path.convert("L")  # Convert to grayscale
         img_resized = img.resize(output_size, Image.Resampling.LANCZOS)  # Resize image
         width, height = img_resized.size
         binary_matrix = [
@@ -114,12 +115,15 @@ def process_image(image_path, output_size=(200, 200), threshold=128, epsilon_rat
     return data_for_json
 
 @app.post("/process-image")
-def process_image_endpoint(image_path: str = Body(...)):
+async def process_image_endpoint(file: UploadFile = File(...)):
     """
     Expects a JSON body with { "image_path": "/path/to/your/image.png" }.
     Returns processed contour & boundary data.
     """
-    result = process_image(image_path)
+    img_bytes = await file.read()
+
+    img = Image.open(io.BytesIO(img_bytes))
+    result = process_image(img)
     return result
 
 if __name__ == "__main__":
